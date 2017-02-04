@@ -5,15 +5,16 @@ This project is using Raspberry PI, Windows 10 IoT Core and two buttons to toggl
 * You will learn, how to use buttons (this mean using pins as an input)
 * You will learn, how to turn onboard LEDs ON and OFF in each button press
 * You will learn, hot to use Event handler, which track your buttons
-* You will learn how to write one method to use in both buttons
-* You will learn, hot to make forever lasting program without while(true) statement
+* You will learn, how to write one method to use in both buttons
+* You will learn, how to make forever lasting program without while(true) statement
 
-# Lets look the code from the beginning
+# Lets look at the code from beginning
 As this project is third Lesson in our Raspberry series, we will some code more lightly as they are alredy explained earlier.
 But still, lets start from the beginning.
 
 In this project we need 4 pins, 2 for LEDs and 2 for buttons.
 
+## Setting variables
 As usual, we are starting to create variables, this time 4 of them. 2 for LEDs and two for buttons.
 Also, we are creating variables for all four pins.
 ```C#
@@ -27,6 +28,7 @@ Also, we are creating variables for all four pins.
         GpioPin btnRed;
 ```
 
+## Init method
 This time the init method is a bit longer than earlier. It has four important things to do.
 
 1. Creating gpio controller to let our code know all about the pins
@@ -60,5 +62,30 @@ This time the init method is a bit longer than earlier. It has four important th
 
             btnGreen.ValueChanged += Btn_ValueChanged;
             btnRed.ValueChanged += Btn_ValueChanged;
+        }
+```
+
+## Event handler code
+This code will be executed only, if either of the button are pressed. 
+
+It has some special input parameters **sender** and **e**:
+1. **sender** is represent always the object, which raises the event. For example, if btnRed has been pressed, then the sender is btnRed.
+2. **e** is representing the event itself. In our example the e means that pin value changed from ON to OFF which means *FallingEdge*.
+
+```C#
+        private void Btn_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
+        {
+            GpioPin led = null;
+            if (sender.PinNumber == BTN_GREEN) led = pinGreen;
+            if (sender.PinNumber == BTN_RED) led = pinRed;
+
+            GpioPinValue pinValue = led.Read();
+            // toggle the state of the LED every time the button is pressed
+            if (e.Edge == GpioPinEdge.FallingEdge)
+            {
+                pinValue = (pinValue == GpioPinValue.Low) ?
+                    GpioPinValue.High : GpioPinValue.Low;
+                led.Write(pinValue);
+            }
         }
 ```

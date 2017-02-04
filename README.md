@@ -16,7 +16,7 @@ In this project we need 4 pins, 2 for LEDs and 2 for buttons.
 
 As usual, we are starting to create variables, this time 4 of them. 2 for LEDs and two for buttons.
 Also, we are creating variables for all four pins.
-´´´C#
+```C#
         int LED_PIN_GEEN = 47;
         int LED_PIN_RED = 35;
         int BTN_GREEN = 5;
@@ -25,7 +25,7 @@ Also, we are creating variables for all four pins.
         GpioPin pinRed;
         GpioPin btnGreen;
         GpioPin btnRed;
-´´´
+```
 
 This time the init method is a bit longer than earlier. It has four important things to do.
 1. Creating gpio controller to let our code know all about the pins
@@ -33,7 +33,7 @@ This time the init method is a bit longer than earlier. It has four important th
 3. Setting parameters for buttons:
 	a) 
 
-´´´C#
+```C#
         private void init()
         {
             var gpio = GpioController.GetDefault();
@@ -53,4 +53,4 @@ This time the init method is a bit longer than earlier. It has four important th
             btnGreen.ValueChanged += Btn_ValueChanged;
             btnRed.ValueChanged += Btn_ValueChanged;
         }
-´´´
+```

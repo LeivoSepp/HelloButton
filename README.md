@@ -1,5 +1,5 @@
 # Lesson #3 Hello Button
-This project is using Raspberry PI, Windows 10 IoT Core and two buttons to toggle onboard leds.
+This project is using Raspberry PI, Windows 10 IoT Core and two buttons to toggle onboard leds. 
 
 * Lesson #1 in this series are:https://github.com/LeivoSepp/Lesson1-HelloBlinky
 * Lesson #2 in this series are: https://github.com/LeivoSepp/Lesson2-HelloBlinkyRedGreen

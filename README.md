@@ -1,6 +1,11 @@
 # Lesson3-HelloButton
 This project is using Raspberry PI, Windows 10 IoT Core and two buttons to toggle onboard leds.
 
+#1 Lesson in this series are:https://github.com/LeivoSepp/Lesson1-HelloBlinky
+#2 Lesson in this series are: https://github.com/LeivoSepp/Lesson2-HelloBlinkyRedGreen
+
+Please check by blog here: http://internetofthing.io/: 
+
 # Why is it worth to try this program?
 * You will learn, how to use buttons (this mean using pins as an input)
 * You will learn, how to turn onboard LEDs ON and OFF in each button press
@@ -34,13 +39,13 @@ This time the init method is a bit longer than earlier. It has four important th
 1. Creating gpio controller to let our code know all about the pins
 2. Setting some parameters for LED pins. For example we are setting according pin-number to each pin and setting them as an aoutput.
 3. Setting parameters for buttons:
-	1. what is the pin number? "your pin number is 5" btnGreen = gpio.OpenPin(BTN_GREEN);
-	2. is that pin input or output? "this pin is input" btnGreen.SetDriveMode(GpioPinDriveMode.InputPullUp);
+	1. what is the pin number? "your pin number is 5" **btnGreen = gpio.OpenPin(BTN_GREEN);**
+	2. is that pin input or output? "this pin is input" **btnGreen.SetDriveMode(GpioPinDriveMode.InputPullUp);**
 		* the InputPullUp mean, that inside the Raspberry the pin will be connected to +3V through the resistor
 		* to use this pin as a button, you need to connect to ground (GND)
-	3. what if the button sends many signals in one press? "this pin accepts new value change after 50ms"
-		* this timeout needed, because all buttons are generating usually 2 or 3 signals in one button press
-4. Registering event handlers for the buttons.
+	3. what if the button sends many signals in one press? "this pin accepts new value change after 50ms" **btnGreen.DebounceTimeout = TimeSpan.FromMilliseconds(50);**
+		* this timeout needed because all buttons are generating usually 2 or 3 signals within one press
+4. Registering event handlers for the buttons. **btnGreen.ValueChanged += Btn_ValueChanged;**
 	* Event handler is a small program which track the button state. If someone push the button, then the pin's state will change and the code inside Btn_ValueChanged will be executed.
 
 ```C#
@@ -75,14 +80,14 @@ It has some special input arguments **sender** and **e**:
 
 Now lets see the code inside the event handler.
 
-1. We will create a new pin-type variable named *led*. *GpioPin led = null;*
-2. We will check the sender, if sender's pin number equal to BTN_GREEN then we assign green LED's pin to variable led.
-3. If sender's pin number equal to BTN_RED then we assign red LED's pin to variable led.
-4. We will create new pin-value type variable pinValue and reading LED pin value and assigning to it.
-5. Now there is one IF statement, which just checking is the button pressed. *e.Edge == GpioPinEdge.FallingEdge*
+1. We will create a new pin-type variable named *led*. **GpioPin led = null;**
+2. We will check the sender, if sender's pin number equal to BTN_GREEN then we assign green LED's pin to variable led. **if (sender.PinNumber == BTN_GREEN) led = pinGreen;**
+3. If sender's pin number equal to BTN_RED then we assign red LED's pin to variable led. 
+4. We will create new pin-value type variable pinValue and reading LED pin value and assigning to it. **GpioPinValue pinValue = led.Read();**
+5. Now there is one IF statement, which just checking is the button pressed. **e.Edge == GpioPinEdge.FallingEdge**
 6. Now there is our friend ternary condition ( ? : ) checking:
-	1. If LED is turned OFF *pinValue == GpioPinValue.Low* then assign High to pinValue else assign Low to pinValue
-	2. change the LED's state according to piValue, which has been set just in previous line
+	1. If LED is turned OFF **pinValue == GpioPinValue.Low** then assign High to pinValue else assign Low to pinValue
+	2. change the LED's state according to piValue, which has been set just in previous line **led.Write(pinValue);**
 
 ```C#
         private void Btn_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
@@ -105,12 +110,12 @@ Now lets see the code inside the event handler.
 
 This time the method Run has some special commands, which prevents it from stopping.
 
-This two lines keep method Run in running state forever
+These two lines keep method Run in running state forever
 
-1. before Run *internal static BackgroundTaskDeferral Deferral = null;*
-2. inside Run *Deferral = taskInstance.GetDeferral();*
+1. before Run just one row: **internal static BackgroundTaskDeferral Deferral = null;**
+2. inside Run one row: **Deferral = taskInstance.GetDeferral();**
 
-This code executes init(); and then just stays as it is and doing nothing, but only checking the buttons statuses. 
+The code executes **init();** and then just stays as it is and doing nothing, but only checking the buttons statuses. 
 
 ```C#
         internal static BackgroundTaskDeferral Deferral = null;

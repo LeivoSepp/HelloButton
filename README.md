@@ -69,8 +69,10 @@ This time the init method is a bit longer than earlier. It has four important th
 This code will be executed only, if either of the button are pressed. 
 
 It has some special input parameters **sender** and **e**:
+
 1. **sender** is represent always the object, which raises the event. For example, if btnRed has been pressed, then the sender is btnRed.
 2. **e** is representing the event itself. In our example the e means that pin value changed from ON to OFF which means *FallingEdge*.
+
 
 ```C#
         private void Btn_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)

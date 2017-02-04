@@ -68,11 +68,21 @@ This time the init method is a bit longer than earlier. It has four important th
 ## Event handler code
 This code will be executed only, if either of the button are pressed. 
 
-It has some special input parameters **sender** and **e**:
+It has some special input arguments **sender** and **e**:
 
-1. **sender** is represent always the object, which raises the event. For example, if btnRed has been pressed, then the sender is btnRed.
-2. **e** is representing the event itself. In our example the e means that pin value changed from ON to OFF which means *FallingEdge*.
+1. **sender** is represent always the object, which raises the event. For example, if btnRed has been pressed, then the sender is *btnRed*.
+2. **e** is representing the event itself. In our example the **e** means that pin value changed from High to Low which means *FallingEdge*.
 
+Now lets see the code inside the event handler.
+
+1. We will create a new pin-type variable named *led*. *GpioPin led = null;*
+2. We will check the sender, if sender's pin number equal to BTN_GREEN then we assign green LED's pin to variable led.
+3. If sender's pin number equal to BTN_RED then we assign red LED's pin to variable led.
+4. We will create new pin-value type variable pinValue and reading LED pin value and assigning to it.
+5. Now there is one IF statement, which just checking is the button pressed. *e.Edge == GpioPinEdge.FallingEdge*
+6. Now there is our friend ternary condition ( ? : ) checking:
+	1. If LED is turned OFF *pinValue == GpioPinValue.Low* then assign High to pinValue else assign Low to pinValue
+	2. change the LED's state according to piValue, which has been set just in previous line
 
 ```C#
         private void Btn_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
@@ -85,9 +95,28 @@ It has some special input parameters **sender** and **e**:
             // toggle the state of the LED every time the button is pressed
             if (e.Edge == GpioPinEdge.FallingEdge)
             {
-                pinValue = (pinValue == GpioPinValue.Low) ?
-                    GpioPinValue.High : GpioPinValue.Low;
+                pinValue = (pinValue == GpioPinValue.Low) ?  GpioPinValue.High : GpioPinValue.Low;
                 led.Write(pinValue);
             }
+        }
+```
+
+## void Run
+
+This time the method Run has some special commands, which prevents it from stopping.
+
+This two lines keep method Run in running state forever
+
+1. before Run *internal static BackgroundTaskDeferral Deferral = null;*
+2. inside Run *Deferral = taskInstance.GetDeferral();*
+
+This code executes init(); and then just stays as it is and doing nothing, but only checking the buttons statuses. 
+
+```C#
+        internal static BackgroundTaskDeferral Deferral = null;
+        public void Run(IBackgroundTaskInstance taskInstance)
+        {
+            Deferral = taskInstance.GetDeferral();
+            init();
         }
 ```

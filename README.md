@@ -30,9 +30,7 @@ Also, we are creating variables for all four pins.
 This time the init method is a bit longer than earlier. It has four important things to do.
 
 1. Creating gpio controller to let our code know all about the pins
-
 2. Setting some parameters for LED pins. For example we are setting according pin-number to each pin and setting them as an aoutput.
-
 3. Setting parameters for buttons:
 	a) 
 

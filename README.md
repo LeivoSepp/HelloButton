@@ -32,7 +32,14 @@ This time the init method is a bit longer than earlier. It has four important th
 1. Creating gpio controller to let our code know all about the pins
 2. Setting some parameters for LED pins. For example we are setting according pin-number to each pin and setting them as an aoutput.
 3. Setting parameters for buttons:
-	a) 
+	a) what is the pin number? "your pin number is 5" btnGreen = gpio.OpenPin(BTN_GREEN);
+	b) is that pin input or output? "this pin is input" btnGreen.SetDriveMode(GpioPinDriveMode.InputPullUp);
+		the InputPullUp mean, that inside the Raspberry the pin will be connected to +3V through the resistor
+		to use this pin as a button, you need to connect to ground (GND)
+	c) what if the button sends many signals in one press? "this pin accepts new value change after 50ms"
+		this timeout needed, because all buttons are generating usually 2 or 3 signals in one button press
+4. Registering event handlers for the buttons.
+	Event handler is a small program which track the button state. If someone push the button, then the pin's state will change and the code inside Btn_ValueChanged will be executed.
 
 ```C#
         private void init()

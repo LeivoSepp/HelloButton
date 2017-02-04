@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel.Background;
 using Windows.Devices.Gpio;
+using Windows.Foundation;
 
 namespace HelloButton
 {
@@ -17,15 +18,10 @@ namespace HelloButton
         private void init()
         {
             var gpio = GpioController.GetDefault();
-            if (gpio == null)
-            {
-                return;
-            }
+
             pinGreen = gpio.OpenPin(LED_PIN_GEEN);
             pinRed = gpio.OpenPin(LED_PIN_RED);
-            pinRed.Write(GpioPinValue.High);
             pinRed.SetDriveMode(GpioPinDriveMode.Output);
-            pinGreen.Write(GpioPinValue.High);
             pinGreen.SetDriveMode(GpioPinDriveMode.Output);
 
             btnGreen = gpio.OpenPin(BTN_GREEN);
@@ -35,32 +31,23 @@ namespace HelloButton
             btnRed.SetDriveMode(GpioPinDriveMode.InputPullUp);
             btnRed.DebounceTimeout = TimeSpan.FromMilliseconds(50);
 
-            btnGreen.ValueChanged += BtnGreen_ValueChanged;
-            btnRed.ValueChanged += BtnRed_ValueChanged;
-
+            btnGreen.ValueChanged += Btn_ValueChanged;
+            btnRed.ValueChanged += Btn_ValueChanged;
         }
 
-        private void BtnGreen_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
+        private void Btn_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
         {
-            GpioPinValue pinValue = pinGreen.Read();
+            GpioPin led = null;
+            if (sender.PinNumber == BTN_GREEN) led = pinGreen;
+            if (sender.PinNumber == BTN_RED) led = pinRed;
+
+            GpioPinValue pinValue = led.Read();
             // toggle the state of the LED every time the button is pressed
             if (e.Edge == GpioPinEdge.FallingEdge)
             {
                 pinValue = (pinValue == GpioPinValue.Low) ?
                     GpioPinValue.High : GpioPinValue.Low;
-                pinGreen.Write(pinValue);
-            }
-        }
-
-        private void BtnRed_ValueChanged(GpioPin sender, GpioPinValueChangedEventArgs e)
-        {
-            GpioPinValue pinValue = pinRed.Read();
-            // toggle the state of the LED every time the button is pressed
-            if (e.Edge == GpioPinEdge.FallingEdge)
-            {
-                pinValue = (pinValue == GpioPinValue.Low) ?
-                    GpioPinValue.High : GpioPinValue.Low;
-                pinRed.Write(pinValue);
+                led.Write(pinValue);
             }
         }
 

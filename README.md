@@ -6,7 +6,7 @@ This project is using Raspberry PI, Windows 10 IoT Core and two buttons to toggl
 * Please check by blog here: http://internetofthing.io/: 
 
 # Why is it worth to try this program?
-* You will learn, how to use buttons (this mean using pins as an input)
+* You will learn, how to use buttons (this mean using pins as an input)  
 * You will learn, how to turn onboard LEDs ON and OFF in each button press
 * You will learn, hot to use Event handler, which track your buttons
 * You will learn, how to write one method to use in both buttons

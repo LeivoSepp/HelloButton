@@ -31,7 +31,7 @@ We will also create four variables for our pins themselves.
         GpioPin btnGreen;
         GpioPin btnRed;
 ```
-Take a look at this picture, GPIO is all the pins and pin is one particular pin. Raspberry PI has two special pins which are to control the green and red LED integrated on the board. The green LED’s pin number is 35 and the red’s pin number is 47. 
+Take a look at this picture, GPIO is all the pins and GpioPin is one particular pin. Raspberry PI has two special pins which are to control the green and red LED integrated on the board. The green LED’s pin number is 35 and the red’s pin number is 47. 
 ![image](https://cloud.githubusercontent.com/assets/13704023/22621382/13b33e60-eb2b-11e6-9776-cf6ca9691280.png)
 
 ## Init method
